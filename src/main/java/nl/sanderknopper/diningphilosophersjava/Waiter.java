@@ -11,11 +11,11 @@ public class Waiter {
         amountOfTimesEatenPerPhilosopher = new int[amountOfChopsticksAndPhilosophers];
     }
 
-    public void waitForAndGiveChopsticks(int philosopherId) throws InterruptedException {
-        System.out.println("Philosopher " + philosopherId + " is waiting for chopsticks.");
-        boolean obtainedChopsticks = false;
-        while (!obtainedChopsticks) {
-            synchronized (chopsticksInUse) {
+    public void waitForAndObtainChopsticks(int philosopherId) throws InterruptedException {
+        System.out.println("Philosopher " + philosopherId + " is asking for chopsticks.");
+        synchronized (chopsticksInUse) {
+            boolean obtainedChopsticks = false;
+            while (!obtainedChopsticks) {
                 // First check if chopsticks are available
                 if (!chopsticksInUse[philosopherId] && !chopsticksInUse[(philosopherId + 1) % chopsticksInUse.length]) {
                     // Now check if we haven't eaten more than others
@@ -29,9 +29,12 @@ public class Waiter {
                         System.out.println("Philosopher " + philosopherId + " should be polite and let others eat too.");
                     }
                 }
-            }
 
-            Thread.sleep(125);
+                if (!obtainedChopsticks) {
+                    System.out.println("Philosopher " + philosopherId + " is waiting for chopsticks to become available.");
+                    chopsticksInUse.wait();
+                }
+            }
         }
     }
 
@@ -44,6 +47,8 @@ public class Waiter {
         synchronized (chopsticksInUse) {
             chopsticksInUse[philosopherId] = false;
             chopsticksInUse[(philosopherId + 1) % chopsticksInUse.length] = false;
+
+            chopsticksInUse.notifyAll();
         }
     }
 }

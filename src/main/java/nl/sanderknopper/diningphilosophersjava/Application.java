@@ -1,7 +1,5 @@
 package nl.sanderknopper.diningphilosophersjava;
 
-import java.util.Arrays;
-
 public class Application {
     private static final int AMOUNT_OF_PHILOSOPHERS_AND_CHOPSTICKS = 5;
 

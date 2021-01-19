@@ -11,12 +11,12 @@ public class Philosopher implements Runnable {
 
     @Override
     public void run() {
-        for (int timesEaten = 0; timesEaten < 3; timesEaten++) {
+        for (int timesEaten = 1; timesEaten < 4; timesEaten++) {
             try {
-                waiter.waitForAndGiveChopsticks(id);
-                System.out.println("Philosopher " + id + " is eating. (time: " + (timesEaten + 1) + ")");
+                waiter.waitForAndObtainChopsticks(id);
+                System.out.println("Philosopher " + id + " is eating. (time: " + timesEaten + ")");
                 Thread.sleep(1000);
-                System.out.println("Philosopher " + id + " is finished eating. (time: " + (timesEaten + 1) + ")");
+                System.out.println("Philosopher " + id + " is finished eating. (time: " + timesEaten + ")");
                 waiter.returnChopsticks(id);
             } catch (InterruptedException e) {
                 return;
